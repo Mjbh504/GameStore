@@ -1,0 +1,154 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc} % Asegura que el archivo esté en UTF-8
+\usepackage[spanish]{babel} % Soporte para idioma español
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Configuración para código Python
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% Título y autor
+\title{\textbf{Guía Completa: Análisis de Datos con Python y Estadística Básica}}
+\author{Tu Nombre}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introducción}
+\subsection{¿Qué es un CSV?}
+Un archivo CSV (Comma-Separated Values) almacena datos en forma de tabla, donde cada fila es un registro y cada columna está separada por comas (o puntos y comas, como en tu caso).
+
+\subsection{¿Por qué usar Python?}
+Python es un lenguaje de programación fácil de aprender con herramientas poderosas para análisis de datos, como las bibliotecas \texttt{pandas}, \texttt{numpy}, y \texttt{matplotlib}.
+
+\section{Configuración Inicial}
+\subsection{Instalar Bibliotecas}
+\begin{lstlisting}[language=Python]
+!pip install pandas numpy matplotlib seaborn
+\end{lstlisting}
+- **¿Qué hace?**: Instala las herramientas necesarias para trabajar con datos y gráficos.
+
+\subsection{Importar Bibliotecas}
+\begin{lstlisting}[language=Python]
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+\end{lstlisting}
+- **Lógica**: Cargamos las herramientas para usarlas con nombres más cortos (ej: \texttt{pd} en lugar de \texttt{pandas}).
+
+\section{Cargar y Explorar Datos}
+\subsection{Leer el CSV}
+\begin{lstlisting}[language=Python]
+df = pd.read_csv("prueba.csv", sep=";", encoding="utf-8")
+\end{lstlisting}
+- **¿Qué hace?**: Carga el archivo CSV en una tabla llamada \texttt{DataFrame} (\texttt{df}).
+
+\subsection{Primeras Filas}
+\begin{lstlisting}[language=Python]
+df.head()
+\end{lstlisting}
+- **Salida**: Muestra las primeras 5 filas del DataFrame.
+
+\subsection{Información General}
+\begin{lstlisting}[language=Python]
+df.info()
+\end{lstlisting}
+- **Salida**: Número de filas y columnas, nombres de columnas y tipos de datos.
+
+\section{Limpieza de Datos}
+\subsection{Valores Faltantes}
+\begin{lstlisting}[language=Python]
+df.isnull().sum()
+\end{lstlisting}
+- **¿Qué hace?**: Cuenta cuántos valores faltantes (\texttt{NaN}) hay en cada columna.
+
+\subsection{Corregir Tipos de Datos}
+\begin{lstlisting}[language=Python]
+df["A\~no"] = df["A\~no"].astype(int) % Escapamos la "n~" con \textbackslash{}~n
+\end{lstlisting}
+- **¿Qué hace?**: Convierte la columna "Año" a números enteros.
+
+\section{Análisis Estadístico}
+\subsection{Matriz de Correlación}
+\begin{lstlisting}[language=Python]
+ventas = ["Ventas NA", "Ventas EU", "Ventas JP", "Ventas Otros", "Ventas Global"]
+correlacion = df[ventas].corr()
+sns.heatmap(correlacion, annot=True, cmap="coolwarm")
+plt.show()
+\end{lstlisting}
+- **Interpretación**: Muestra cómo se relacionan las ventas entre regiones.
+
+\section{Visualizaciones Clave}
+\subsection{Gráfico de Barras (Top Plataformas)}
+\begin{lstlisting}[language=Python]
+plataformas = df["Plataforma"].value_counts().head(10)
+plataformas.plot(kind="bar", title="Top 10 Plataformas")
+plt.xlabel("Plataforma")
+plt.ylabel("Cantidad de Juegos")
+plt.show()
+\end{lstlisting}
+- **Lógica**: Cuenta cuántos juegos hay por plataforma y muestra las 10 más comunes.
+
+\section{Modelos Estadísticos Básicos}
+\subsection{Media y Mediana}
+\begin{lstlisting}[language=Python]
+df["Ventas Global"].mean()  % Media
+df["Ventas Global"].median()  % Mediana
+\end{lstlisting}
+- **Media**: Promedio de ventas.
+- **Mediana**: Valor que separa la mitad superior e inferior de los datos.
+
+\section{Exportar Resultados}
+\begin{lstlisting}[language=Python]
+df.to_csv("datos_procesados.csv", index=False)
+\end{lstlisting}
+- **¿Qué hace?**: Guarda el DataFrame limpio y procesado en un nuevo CSV.
+
+\section{Glosario}
+\begin{itemize}
+    \item \textbf{DataFrame}: Tabla de datos en pandas (filas y columnas).
+    \item \textbf{NaN}: Valor faltante o nulo.
+    \item \textbf{Correlación}: Relación estadística entre dos variables.
+    \item \textbf{Outlier}: Dato anormalmente alejado de los demás.
+\end{itemize}
+
+\section{Consejos Finales}
+\begin{itemize}
+    \item Si un gráfico no se muestra, añade \texttt{\%matplotlib inline} al inicio del notebook.
+    \item Usa \texttt{df.sample(5)} para ver filas aleatorias.
+    \item Experimenta cambiando parámetros (ej: \texttt{kind="bar"} a \texttt{kind="pie"}).
+\end{itemize}
+
+\end{document}
